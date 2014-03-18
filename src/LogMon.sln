@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogMon", "LogMon\LogMon.csproj", "{F412FCE6-189D-4115-9BA8-D00503A8982F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Macu.Apply.LogMonService", "Macu.Apply.LogMonService\Macu.Apply.LogMonService.csproj", "{419D5CF8-A1BA-4B61-A134-96AAEA53FCF9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F412FCE6-189D-4115-9BA8-D00503A8982F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F412FCE6-189D-4115-9BA8-D00503A8982F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F412FCE6-189D-4115-9BA8-D00503A8982F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F412FCE6-189D-4115-9BA8-D00503A8982F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419D5CF8-A1BA-4B61-A134-96AAEA53FCF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419D5CF8-A1BA-4B61-A134-96AAEA53FCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419D5CF8-A1BA-4B61-A134-96AAEA53FCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419D5CF8-A1BA-4B61-A134-96AAEA53FCF9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
