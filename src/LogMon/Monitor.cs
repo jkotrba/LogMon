@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace LogMon
 {
     public class Monitor
     {
+        //is http://websvcs1.mtnam.org/symcon.service.alps/symconservice.svc
         private const string ConnectionStringName = "AppLogs";
         private const string LastEntryReadSettingsKey = "LastReadEntryId";
         private const string SymConCastException = "Unable to cast object of type";
@@ -17,12 +19,20 @@ namespace LogMon
         private int? _lastReadEntryId;
         public void Run()
         {
-            _logger.Info("Checking for entries");
-            //var entries = FindEntries(LastReadEntryId);
-            //if (entries.Any())
-            //{
-            //    SendAlert(entries);
-            //}
+            _logger.Debug("Monitor Run");
+            try
+            {
+                //_logger.Debug();
+                var entries = FindEntries(LastReadEntryId);
+                if (entries.Any())
+                {
+                    SendAlert(entries);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.ErrorException("Run failure", e);
+            }
         }
 
         protected IEnumerable<LogEntry> FindEntries(int lastReadEntryId)
