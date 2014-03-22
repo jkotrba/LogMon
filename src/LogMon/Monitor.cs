@@ -18,11 +18,14 @@ namespace LogMon
         public void Run()
         {
             _logger.Info("Checking for entries");
-            //var entries = FindEntries(LastReadEntryId);
-            //if (entries.Any())
-            //{
-            //    SendAlert(entries);
-            //}
+            var entries = FindEntries(LastReadEntryId).ToList();
+            _logger.Info("{0} entries found", entries.Count);
+
+            if (entries.Any())
+            {
+                _logger.Info("Sending alerts");
+                SendAlert(entries);
+            }
         }
 
         protected IEnumerable<LogEntry> FindEntries(int lastReadEntryId)
@@ -40,7 +43,7 @@ namespace LogMon
                 return currentEntries.Where(
                     e => !string.IsNullOrEmpty(e.Exception) && e.Exception.Substring(0, 30) == SymConCastException);
             }
-            return null;
+            return Enumerable.Empty<LogEntry>();
         }
 
         protected void SendAlert(IEnumerable<LogEntry> entriesFound)
