@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace LogMon
     {
         private const string ConnectionStringName = "AppLogs";
         private const string LastEntryReadSettingsKey = "LastReadEntryId";
-        private const string SymConCastException = "Unable to cast object of type";
+        //private const string SymConCastException = "Unable to cast object of type";
+        private const string SymConTimeoutException = "Unable to read data from the transport connection: A connection attempt failed because the connected party did not properly respond after a period of time";
         private const string AlertRecipientsSettingsKey = "AlertRecipients";
 
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -18,14 +20,22 @@ namespace LogMon
         public void Run()
         {
             _logger.Info("Checking for entries");
-            var entries = FindEntries(LastReadEntryId).ToList();
-            _logger.Info("{0} entries found", entries.Count);
-
-            if (entries.Any())
+            try
             {
-                _logger.Info("Sending alerts");
-                SendAlert(entries);
+                var entries = FindEntries(LastReadEntryId).ToList();
+                _logger.Info("{0} entries found", entries.Count);
+
+                if (entries.Any())
+                {
+                    _logger.Info("Sending alerts");
+                    SendAlert(entries);
+                }
             }
+            catch (Exception e)
+            {
+                _logger.ErrorException(e.Message, e);
+            }
+            
         }
 
         protected IEnumerable<LogEntry> FindEntries(int lastReadEntryId)
@@ -41,7 +51,7 @@ namespace LogMon
                 }
 
                 return currentEntries.Where(
-                    e => !string.IsNullOrEmpty(e.Exception) && e.Exception.Substring(0, 30) == SymConCastException);
+                    e => !string.IsNullOrEmpty(e.Exception) && e.Exception.Substring(0, SymConTimeoutException.Length) == SymConTimeoutException);
             }
             return Enumerable.Empty<LogEntry>();
         }
@@ -73,7 +83,13 @@ namespace LogMon
             }
             set
             {
-               ConfigurationManager.AppSettings.Set(LastEntryReadSettingsKey, value.ToString(CultureInfo.CurrentUICulture));
+                _lastReadEntryId = value;
+
+                var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                config.AppSettings.Settings.Remove(LastEntryReadSettingsKey);
+                config.AppSettings.Settings.Add(LastEntryReadSettingsKey, _lastReadEntryId.Value.ToString(CultureInfo.CurrentCulture));
+                config.Save();
+                
             }
         }
 
